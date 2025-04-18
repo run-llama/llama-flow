@@ -1,4 +1,4 @@
-import type { WorkflowEvent, WorkflowEventData } from "@llama-flow/core";
+import type { WorkflowEvent, WorkflowEventData } from "./event";
 import {
   createSubscribable,
   flattenEvents,

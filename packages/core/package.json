@@ -3,120 +3,116 @@
   "version": "0.3.4",
   "description": "event-based workflow engine",
   "type": "module",
-  "main": "dist/index.cjs",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.js",
-  "browser": "dist/index.browser.js",
+  "main": "dist/cjs/index.cjs",
+  "types": "dist/types/index.d.ts",
+  "module": "dist/esm/index.js",
+  "browser": "dist/esm/index.browser.js",
   "exports": {
     ".": {
       "workerd": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
       },
       "edge-light": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.serverless.js"
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.serverless.js"
       },
       "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
+        "types": "./dist/types/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
       },
       "default": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
       }
     },
     "./async-context": {
       "browser": {
-        "types": "./async-context/index.d.ts",
-        "default": "./async-context/index.browser.js"
+        "types": "./dist/types/async-context/index.d.ts",
+        "default": "./dist/esm/async-context/index.browser.js"
       },
       "require": {
-        "types": "./async-context/index.d.cts",
-        "default": "./async-context/index.cjs"
+        "types": "./dist/types/async-context/index.d.cts",
+        "default": "./dist/cjs/async-context/index.cjs"
       },
       "default": {
-        "types": "./async-context/index.d.ts",
-        "default": "./async-context/index.js"
+        "types": "./dist/types/async-context/index.d.ts",
+        "default": "./dist/esm/async-context/index.js"
       }
     },
     "./interrupter/hono": {
-      "types": "./interrupter/hono.d.ts",
-      "default": "./interrupter/hono.js"
+      "types": "./dist/types/interrupter/hono.d.ts",
+      "default": "./dist/esm/interrupter/hono.js"
     },
     "./interrupter/mcp": {
-      "types": "./interrupter/mcp.d.ts",
-      "default": "./interrupter/mcp.js"
+      "types": "./dist/types/interrupter/mcp.d.ts",
+      "default": "./dist/esm/interrupter/mcp.js"
     },
     "./interrupter/next": {
-      "types": "./interrupter/next.d.ts",
-      "default": "./interrupter/next.js"
+      "types": "./dist/types/interrupter/next.d.ts",
+      "default": "./dist/esm/interrupter/next.js"
     },
     "./interrupter/promise": {
-      "types": "./interrupter/promise.d.ts",
-      "default": "./interrupter/promise.js"
+      "types": "./dist/types/interrupter/promise.d.ts",
+      "default": "./dist/esm/interrupter/promise.js"
     },
     "./middleware/store": {
-      "types": "./middleware/store.d.ts",
-      "default": "./middleware/store.js"
+      "types": "./dist/types/middleware/store.d.ts",
+      "default": "./dist/esm/middleware/store.js"
     },
     "./middleware/trace-events": {
-      "types": "./middleware/trace-events.d.ts",
-      "default": "./middleware/trace-events.js"
+      "types": "./dist/types/middleware/trace-events.d.ts",
+      "default": "./dist/esm/middleware/trace-events.js"
     },
     "./middleware/validation": {
-      "types": "./middleware/validation.d.ts",
-      "default": "./middleware/validation.js"
+      "types": "./dist/types/middleware/validation.d.ts",
+      "default": "./dist/esm/middleware/validation.js"
     },
     "./util/p-retry": {
-      "types": "./util/p-retry.d.ts",
-      "default": "./util/p-retry.js"
+      "types": "./dist/types/util/p-retry.d.ts",
+      "default": "./dist/esm/util/p-retry.js"
     },
     "./util/zod": {
-      "types": "./util/zod.d.ts",
-      "default": "./util/zod.js"
+      "types": "./dist/types/util/zod.d.ts",
+      "default": "./dist/esm/util/zod.js"
     },
     "./stream/consumer": {
-      "types": "./stream/consumer.d.ts",
-      "default": "./stream/consumer.js"
+      "types": "./dist/types/stream/consumer.d.ts",
+      "default": "./dist/esm/stream/consumer.js"
     },
     "./stream/filter": {
-      "types": "./stream/filter.d.ts",
-      "default": "./stream/filter.js"
+      "types": "./dist/types/stream/filter.d.ts",
+      "default": "./dist/esm/stream/filter.js"
     },
     "./stream/find": {
-      "types": "./stream/find.d.ts",
-      "default": "./stream/find.js"
+      "types": "./dist/types/stream/find.d.ts",
+      "default": "./dist/esm/stream/find.js"
     },
     "./stream/until": {
-      "types": "./stream/until.d.ts",
-      "default": "./stream/until.js"
+      "types": "./dist/types/stream/until.d.ts",
+      "default": "./dist/esm/stream/until.js"
     }
   },
   "files": [
-    "async-context",
-    "dist",
-    "interrupter",
-    "util",
-    "middleware",
-    "stream"
+    "dist"
   ],
   "scripts": {
-    "build": "rimraf dist interrupter middleware stream util async-context && tsup",
-    "dev": "tsup --watch",
+    "build": "rslib build",
+    "dev": "rslib build --watch",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
+    "@rslib/core": "^0.6.5",
+    "@microsoft/api-extractor": "^7.52.4",
     "@types/node": "^22.13.10",
     "hono": "^4.7.4",
     "next": "^15.2.2",
     "p-retry": "^6.2.1",
     "rimraf": "^6.0.1",
     "stream-chain": "^3.4.0",
-    "tsup": "^8.4.0",
     "typescript": "^5.8.2",
     "zod": "^3.24.2"
   },
