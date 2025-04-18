@@ -1,5 +1,5 @@
 import { type WorkflowEvent, type WorkflowEventData } from "./event";
-import { createContext, type Handler, type WorkflowContext } from "./context";
+import { createContext, type Handler, type WorkflowContext } from "./_context";
 
 export type Workflow<Mis extends [] = [], Mos extends [] = []> = {
   handle<

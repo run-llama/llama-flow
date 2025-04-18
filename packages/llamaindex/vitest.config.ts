@@ -5,11 +5,6 @@ export default defineConfig({
   test: {
     workspace: [
       {
-        plugins: [
-          tsconfigPaths({
-            projects: ["./tsconfig.test.json"],
-          }),
-        ],
         test: {
           name: "Node.js",
           environment: "node",

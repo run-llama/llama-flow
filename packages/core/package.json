@@ -102,8 +102,8 @@
     "stream"
   ],
   "scripts": {
-    "build": "rimraf dist interrupter middleware stream util async-context && tsup",
-    "dev": "tsup --watch",
+    "build": "bunchee",
+    "dev": "bunchee --watch",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "prepublishOnly": "cp ../../README.md ./README.md"
@@ -111,12 +111,12 @@
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
     "@types/node": "^22.13.10",
+    "bunchee": "^6.5.0",
     "hono": "^4.7.4",
     "next": "^15.2.2",
     "p-retry": "^6.2.1",
     "rimraf": "^6.0.1",
     "stream-chain": "^3.4.0",
-    "tsup": "^8.4.0",
     "typescript": "^5.8.2",
     "zod": "^3.24.2"
   },

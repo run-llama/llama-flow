@@ -3,7 +3,7 @@ import type {
   WorkflowEvent,
   WorkflowEventData,
 } from "@llama-flow/core";
-import type { HandlerContext } from "../../core/context";
+import type { HandlerContext } from "@llama-flow/core";
 
 const namespace = "decorator" as const;
 
