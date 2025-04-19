@@ -12,6 +12,11 @@ export type InferWorkflowEventData<T> =
       ? U
       : never;
 
+export type InferWorkflowEvent<Event> =
+  Event extends WorkflowEvent<infer Data, infer DebugLabel>
+    ? WorkflowEventData<Data, DebugLabel>
+    : never;
+
 export type WorkflowEventData<Data, DebugLabel extends string = string> = {
   get data(): Data;
 } & { readonly [opaqueSymbol]: DebugLabel };
