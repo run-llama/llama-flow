@@ -1,6 +1,12 @@
 {
-  "title": "LlamaFlow",
-  "description": "Simple, lightweight workflow engine",
-  "root": true,
-  "pages": ["---Guide---", "index", "..."]
+  "title": "Workflows",
+  "description": "Event-driven workflow engine for TypeScript",
+  "defaultOpen": false,
+  "pages": [
+    "index",
+    "basic-workflow",
+    "streaming",
+    "advanced-events",
+    "llamaindex-integration"
+  ]
 }

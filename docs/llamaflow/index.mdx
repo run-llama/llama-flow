@@ -1,19 +1,119 @@
 ---
-title: What is LlamaFlow
-description: 🌊 is a simple, lightweight workflow engine, in TypeScript.
+title: Getting Started with Workflows
+description: Learn how to use LlamaIndex's lightweight workflow engine for TypeScript
 ---
 
-LlamaFlow is a simple, lightweight workflow engine, in TypeScript.
-It is designed to be easy to use and integrate with your existing applications.
+Workflows are a simple and lightweight engine for TypeScript. Built with ❤️ by LlamaIndex.
 
-## Features
-
-- Minimal core API (&le;2kb)
+- Minimal core API (\<\=2kb)
 - 100% Type safe
 - Event-driven, stream oriented programming
+- Support for multiple JS runtimes/frameworks
 
 ## Installation
 
-```package-install
-npm i @llama-flow/core
+It's directly included with the `llamaindex` package:
+
+```shell
+npm i llamaindex
 ```
+
+But can also be installed separately:
+
+```shell
+npm i @llama-flow/core
+
+# or with yarn
+yarn add @llama-flow/core
+
+# or with pnpm
+pnpm add @llama-flow/core
+```
+
+## Key Concepts
+
+- **Events**: Data carriers that flow through the workflow
+- **Handlers**: Functions that process events and emit new events
+- **Workflow**: Connects events and handlers together
+- **Context**: Runtime environment for a workflow execution
+
+## Basic Usage
+
+Let's build a simple workflow that processes a text input:
+
+### 1. Define events
+
+First, we need to define the events that will flow through our workflow:
+
+```ts
+import { workflowEvent } from "@llama-flow/core";
+
+// Define input and output events
+const startEvent = workflowEvent<string>(); // Takes a string input
+const convertEvent = workflowEvent<Number>();       // Intermediate event
+const stopEvent = workflowEvent<1 | -1>();  // Final output event, returns 1 or -1
+```
+
+### 2. Create a workflow and connect events
+
+Next, we'll create our workflow and define how events are processed:
+
+```ts
+import { createWorkflow } from "@llama-flow/core";
+
+const workflow = createWorkflow();
+
+// Handle the start event: convert the string to a number
+workflow.handle([startEvent], (start) => {
+  return convertEvent.with(Number.parseInt(start.data, 10));
+});
+
+// Handle the convert event: determine if number is positive or negative
+workflow.handle([convertEvent], (convert) => {
+  return stopEvent.with(convert.data > 0 ? 1 : -1);
+});
+```
+
+### 3. Run the workflow
+
+Finally, we can execute our workflow:
+
+:::note
+This may require setting `"lib": ["ES2022", "DOM", "DOM.Iterable", "DOM.AsyncIterable"],` in your `tsconfig`
+
+```ts
+// Create a workflow context and send the initial event
+const { stream, sendEvent } = workflow.createContext();
+sendEvent(startEvent.with("42"));
+
+// Process the stream to get the result
+import { pipeline } from "node:stream/promises";
+
+const result = await pipeline(stream, async function (source) {
+  for await (const event of source) {
+    if (stopEvent.include(event)) {
+      return `Result: ${event.data === 1 ? 'positive' : 'negative'}`;
+    }
+  }
+});
+
+console.log(result); // "Result: positive"
+```
+
+Or using the stream utilities:
+
+```ts
+import { collect } from '@llama-flow/core/stream/consumer';
+import { until } from '@llama-flow/core/stream/until';
+
+// Create a workflow context and send the initial event
+const { stream, sendEvent } = workflow.createContext();
+sendEvent(startEvent.with("42"));
+
+// Collect all events until we get a stopEvent
+const allEvents = await collect(until(stream, stopEvent));
+const finalEvent = allEvents[allEvents.length - 1];
+console.log(`Result: ${finalEvent.data === 1 ? 'positive' : 'negative'}`);
+```
+
+Ready to learn more? Check out our [detailed examples](./basic-workflow.mdx) to see llama-flow in action!
