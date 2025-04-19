@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.browser.json",
   "compilerOptions": {
+    "lib": ["esnext", "dom"],
     "outDir": "./lib/browser-test",
     "tsBuildInfoFile": "./lib/browser-test/.tsbuildinfo"
   },

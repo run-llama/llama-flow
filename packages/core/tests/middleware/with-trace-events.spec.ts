@@ -4,10 +4,12 @@ import {
   withTraceEvents,
   runOnce,
   createHandlerDecorator,
+  getEventOrigins,
 } from "@llama-flow/core/middleware/trace-events";
 import { filter } from "@llama-flow/core/stream/filter";
 import { collect } from "@llama-flow/core/stream/consumer";
 import { until } from "@llama-flow/core/stream/until";
+import { pipeline } from "node:stream/promises";
 
 describe("with trace events", () => {
   test("runOnce", () => {
@@ -183,5 +185,107 @@ describe("with trace events", () => {
     resolveNext();
     await vi.waitFor(() => expect(result).toEqual([1, 2, 3, 4]));
     expect(ref.handler).toBeCalledTimes(4);
+  });
+});
+
+describe("get event origins", () => {
+  test("should get event origins", async () => {
+    const startEvent = workflowEvent<string>({
+      debugLabel: "startEvent",
+    });
+    const branchAEvent = workflowEvent<string>({
+      debugLabel: "branchAEvent",
+    });
+    const branchBEvent = workflowEvent<string>({
+      debugLabel: "branchBEvent",
+    });
+    const branchCEvent = workflowEvent<string>({
+      debugLabel: "branchCEvent",
+    });
+    const branchCompleteEvent = workflowEvent<string>({
+      debugLabel: "branchCompleteEvent",
+    });
+    const allCompleteEvent = workflowEvent<string>({
+      debugLabel: "allCompleteEvent",
+    });
+    const stopEvent = workflowEvent<string>({
+      debugLabel: "stopEvent",
+    });
+
+    const workflow = withTraceEvents(createWorkflow());
+    workflow.handle([startEvent], async () => {
+      const { sendEvent, stream } = getContext();
+      const context = getContext();
+      sendEvent(branchAEvent.with("Branch A"));
+      sendEvent(branchBEvent.with("Branch B"));
+      sendEvent(branchCEvent.with("Branch C"));
+
+      let condition = 0;
+      const results = await collect(
+        until(
+          filter(stream, (ev) => branchCompleteEvent.include(ev)),
+          () => {
+            condition++;
+            return condition === 3;
+          },
+        ),
+      );
+
+      const result = Object.groupBy(
+        results,
+        (e) => `${getEventOrigins(e, context)[0]}`,
+      );
+      expect(result).toMatchInlineSnapshot(`
+        {
+          "branchAEvent(1)": [
+            {
+              "data": "Branch A",
+              "event": "4",
+            },
+          ],
+          "branchBEvent(3)": [
+            {
+              "data": "Branch B",
+              "event": "4",
+            },
+          ],
+          "branchCEvent(5)": [
+            {
+              "data": "Branch C",
+              "event": "4",
+            },
+          ],
+        }
+      `);
+
+      return allCompleteEvent.with(results.map((e) => e.data).join(", "));
+    });
+
+    workflow.handle([branchAEvent], (branchA) => {
+      return branchCompleteEvent.with(branchA.data);
+    });
+
+    workflow.handle([branchBEvent], (branchB) => {
+      return branchCompleteEvent.with(branchB.data);
+    });
+
+    workflow.handle([branchCEvent], (branchC) => {
+      return branchCompleteEvent.with(branchC.data);
+    });
+
+    workflow.handle([allCompleteEvent], (allComplete) => {
+      return stopEvent.with(allComplete.data);
+    });
+
+    const { stream, sendEvent } = workflow.createContext();
+    sendEvent(startEvent.with("initial data"));
+
+    const result = await pipeline(stream, async function (source) {
+      for await (const event of source) {
+        if (stopEvent.include(event)) {
+          return `Result: ${event.data}`;
+        }
+      }
+    });
   });
 });
