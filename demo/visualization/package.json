@@ -1,0 +1,28 @@
+{
+  "name": "browser",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@llama-flow/core": "latest",
+    "@llama-flow/viz": "workspace:*",
+    "graphology": "^0.26.0",
+    "graphology-layout-force": "^0.2.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "sigma": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react-swc": "^3.9.0",
+    "globals": "^16.0.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.2"
+  }
+}
