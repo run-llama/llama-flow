@@ -5,3 +5,4 @@ packages:
   - "./demo/waku"
   - "./docs"
   - "./packages/*"
+  - "./tests/*"
