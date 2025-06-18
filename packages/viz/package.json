@@ -1,0 +1,95 @@
+{
+  "name": "@llama-flow/viz",
+  "version": "0.1.0",
+  "description": "Visualization components for LlamaFlow",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "bin": {
+    "llamaflow": "./dist/bin/llamaflow.js"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./sigma": {
+      "import": {
+        "types": "./dist/sigma.d.ts",
+        "default": "./dist/sigma.js"
+      },
+      "require": {
+        "types": "./dist/sigma.d.cts",
+        "default": "./dist/sigma.cjs"
+      },
+      "default": {
+        "types": "./dist/sigma.d.ts",
+        "default": "./dist/sigma.js"
+      }
+    },
+    "./parser": {
+      "import": {
+        "types": "./dist/parser.d.ts",
+        "default": "./dist/parser.js"
+      },
+      "require": {
+        "types": "./dist/parser.d.cts",
+        "default": "./dist/parser.cjs"
+      },
+      "default": {
+        "types": "./dist/parser.d.ts",
+        "default": "./dist/parser.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bunchee",
+    "dev": "bunchee --watch"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.27.1",
+    "@llama-flow/core": "workspace:*",
+    "@types/node": "^22.15.19",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "@types/yargs": "^17.0.33",
+    "bunchee": "^6.5.1"
+  },
+  "peerDependencies": {
+    "@llama-flow/core": "workspace:*"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/run-llama/llama-flow.git",
+    "directory": "packages/viz"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.27.2",
+    "@hono/node-server": "^1.14.1",
+    "@vitejs/plugin-react": "^4.4.1",
+    "graphology": "^0.26.0",
+    "hono": "^4.7.7",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "vite": "^6.3.2",
+    "yargs": "^17.7.2"
+  }
+}

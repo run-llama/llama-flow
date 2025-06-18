@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "outDir": "./lib",
+    "tsBuildInfoFile": "./lib/.tsbuildinfo",
+    "paths": {
+      "@llama-flow/viz": ["./src/index.ts"]
+    },
+    "jsx": "react"
+  },
+  "include": ["./src", "./examples"]
+}
